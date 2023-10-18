@@ -1,0 +1,56 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome @User.Claims.FirstOrDefault()?.Value</h1>
+</div>
+
+<form method="post">
+    <div class="container row g-3 align-items-center">
+        <div class="col-4">
+            <input class="form-control" style="width: 350px" asp-for="SearchValue" placeholder="Input search value" />
+        </div>
+        <div class="col-auto">
+            <select class="form-control" asp-for="FilterBy" asp-items="ViewBag.SearchBy"></select>
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-secondary">Search</button>
+        </div>
+    </div>
+
+</form>
+
+<div class="container">
+    <div class="row">
+        @foreach(var item in Model.Products)
+        {
+            <div class="col-sm-4 mt-3">
+                <div class="card">
+                    <img src="@item.ProductImage" class="card-img-top" style="height: 220px" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.ProductName</h5>
+                        <p class="card-text text-danger">$ @item.UnitPrice</p>
+                        <button type="button" class="btn btn-primary" onclick="handleAdditem(@item.ProductId)">Add To Card</button>
+                        <a asp-page="./Products/Details" asp-route-id="@item.ProductId" class="btn btn-danger">View Details</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div hidden>
+    <form method="post" asp-page-handler="AddItem" id="addToCartForm">
+        <input type="text" name="id" id="productId" />
+    </form>
+</div>
+
+<script>
+    const handleAdditem = (productId) => {
+        document.getElementById("productId").value = productId;
+        document.getElementById("addToCartForm").submit();
+    }
+</script>
