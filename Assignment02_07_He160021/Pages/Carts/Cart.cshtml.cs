@@ -42,7 +42,14 @@ namespace Assignment02_07_He160021.Pages
             Cart cart = new Cart() { Id = int.Parse(form["id"]) };
             string? cookie = Request.Cookies["my-cart"];
             string newCookie = CartUltil.RemoveItem(cart, cookie);
-            UpdateCookie(newCookie);
+            if(string.IsNullOrEmpty(newCookie))
+            {
+                Response.Cookies.Delete("my-cart");
+            }
+            else
+            {
+                UpdateCookie(newCookie);
+            }
             return RedirectToPage("/Carts/Cart");
         }
 
@@ -53,6 +60,11 @@ namespace Assignment02_07_He160021.Pages
                 Id = int.Parse(form["id"]),
                 Number = int.Parse(form["number"])
             };
+            if(cart.Number <= 0)
+            {
+                string message = "Numbers of product should more than 0.";
+                return RedirectToPage("/Carts/Cart", new { message });
+            }
             if(!CheckNumberInStore(cart))
             {
                 string message = "Numbers of this product is not enough.";

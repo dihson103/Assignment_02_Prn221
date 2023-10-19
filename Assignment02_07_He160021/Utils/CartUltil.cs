@@ -23,6 +23,7 @@ namespace Assignment02_07_He160021.Utils
 
         private static string GetCookie(List<Cart> carts)
         {
+            if (carts.Count == 0) return "";
             string cookie = "";
             carts.ForEach(cart =>
             {

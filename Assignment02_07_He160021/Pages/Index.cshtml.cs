@@ -1,6 +1,7 @@
 ﻿using Assignment02_07_He160021.Dtos;
 using Assignment02_07_He160021.Model;
 using Assignment02_07_He160021.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -69,6 +70,11 @@ namespace Assignment02_07_He160021.Pages
 
         public IActionResult OnPostAddItem(IFormCollection form)
         {
+            var user = HttpContext.User;
+            if (user.Identity.IsAuthenticated == false)
+            {
+                return RedirectToPage("/Login");
+            }
             string? cookie = Request.Cookies["my-cart"];
             if(cookie == null)
             {
