@@ -6,9 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Assignment02_07_He160021.Model;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace Assignment02_07_He160021.Pages.Orders
 {
+    [Authorize]
     public class IndexModel : PageModel
     {
         private readonly Assignment02_07_He160021.Model.Prn221Assignment0207Context _context;
@@ -22,10 +25,14 @@ namespace Assignment02_07_He160021.Pages.Orders
 
         public async Task OnGetAsync()
         {
+            var user = HttpContext.User;
+            var username = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (_context.Orders != null)
             {
                 Order = await _context.Orders
-                .Include(o => o.Customer).ToListAsync();
+                .Include(o => o.Customer)
+                .Where(o => o.Customer.Username == username)
+                .ToListAsync();
             }
         }
     }

@@ -8,9 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using Assignment02_07_He160021.Model;
 using Microsoft.AspNetCore.Authorization;
 
-namespace Assignment02_07_He160021.Pages.Products
+namespace Assignment02_07_He160021.Pages.Orders
 {
-    [Authorize(Policy = "Admin")]
+    [Authorize]
     public class DetailsModel : PageModel
     {
         private readonly Assignment02_07_He160021.Model.Prn221Assignment0207Context _context;
@@ -20,23 +20,31 @@ namespace Assignment02_07_He160021.Pages.Products
             _context = context;
         }
 
-      public Product Product { get; set; } = default!; 
+        public Order Order { get; set; } = default!;
+        public List<OrderDetail> OrderDetails { get; set; } = default!;
+        public decimal Total { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Products == null)
+            if (id == null || _context.Orders == null)
             {
                 return NotFound();
             }
 
-            var product = await _context.Products.FirstOrDefaultAsync(m => m.ProductId == id);
-            if (product == null)
+            var order = await _context.Orders.Include(o => o.Customer).FirstOrDefaultAsync(m => m.OrderId == id);
+            var orderDetails = await _context.OrderDetails
+                .Include(o => o.Product)
+                .Where(o => o.OrderId == id)
+                .ToListAsync();
+            if (order == null)
             {
                 return NotFound();
             }
             else 
             {
-                Product = product;
+                Order = order;
+                OrderDetails = orderDetails;
+                Total = OrderDetails.ConvertAll(x => x.UnitPrice * x.Quantity).Sum();
             }
             return Page();
         }

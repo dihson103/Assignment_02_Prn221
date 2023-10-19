@@ -1,6 +1,7 @@
 using Assignment02_07_He160021.Dtos;
 using Assignment02_07_He160021.Model;
 using Assignment02_07_He160021.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using System.Security.Claims;
 
 namespace Assignment02_07_He160021.Pages
 {
+    [Authorize]
     public class CartModel : PageModel
     {
         private readonly Prn221Assignment0207Context _context;

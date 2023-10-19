@@ -1,0 +1,111 @@
+﻿@page
+@model Assignment02_07_He160021.Pages.Orders.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Order</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Order.OrderDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Order.OrderDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Order.RequiredDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Order.RequiredDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Order.ShippedDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Order.ShippedDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Order.Freight)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Order.Freight)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Order.ShipAddress)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Order.ShipAddress)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Order.Customer)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Order.Customer.Username)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Total)
+        </dt>
+        <dd class="col-sm-10" style="color: red">
+            $ @Html.DisplayFor(model => model.Total)
+        </dd>
+    </dl>
+</div>
+
+@if (User.Claims.SingleOrDefault(c => c.Type == "Role")?.Value == "1")
+{
+    <div>
+        <a asp-page="./Edit" asp-route-id="@Model.Order?.OrderId">Edit</a> |
+        <a asp-page="./Admin">Back to List</a>
+    </div>
+}
+else
+{
+    <div>
+        <a asp-page="/Index">Back to home</a>
+    </div>
+}
+
+<table class="table mt-5">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderDetails[0].Product.ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderDetails[0].Product.ProductImage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderDetails[0].Product.UnitPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderDetails[0].Quantity)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderDetails)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Product.ProductName)
+                 </td>
+                <td>
+                    <img src="@Html.DisplayFor(modelItem => item.Product.ProductImage)" style="width: 80px"/>
+                </td>
+                <td style="color: red">
+                    $ @Html.DisplayFor(modelItem => item.Product.UnitPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

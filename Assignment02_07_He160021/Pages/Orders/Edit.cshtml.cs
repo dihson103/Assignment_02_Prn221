@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Assignment02_07_He160021.Model;
 using Microsoft.AspNetCore.Authorization;
 
-namespace Assignment02_07_He160021.Pages.Products
+namespace Assignment02_07_He160021.Pages.Orders
 {
     [Authorize(Policy = "Admin")]
     public class EditModel : PageModel
@@ -22,23 +22,22 @@ namespace Assignment02_07_He160021.Pages.Products
         }
 
         [BindProperty]
-        public Product Product { get; set; } = default!;
+        public Order Order { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Products == null)
+            if (id == null || _context.Orders == null)
             {
                 return NotFound();
             }
 
-            var product =  await _context.Products.FirstOrDefaultAsync(m => m.ProductId == id);
-            if (product == null)
+            var order =  await _context.Orders.FirstOrDefaultAsync(m => m.OrderId == id);
+            if (order == null)
             {
                 return NotFound();
             }
-            Product = product;
-           ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryId");
-           ViewData["SupplierId"] = new SelectList(_context.Suppliers, "SupplierId", "SupplierId");
+            Order = order;
+           ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "CustomerId");
             return Page();
         }
 
@@ -51,7 +50,7 @@ namespace Assignment02_07_He160021.Pages.Products
                 return Page();
             }
 
-            _context.Attach(Product).State = EntityState.Modified;
+            _context.Attach(Order).State = EntityState.Modified;
 
             try
             {
@@ -59,7 +58,7 @@ namespace Assignment02_07_He160021.Pages.Products
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProductExists(Product.ProductId))
+                if (!OrderExists(Order.OrderId))
                 {
                     return NotFound();
                 }
@@ -69,12 +68,12 @@ namespace Assignment02_07_He160021.Pages.Products
                 }
             }
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("./Admin");
         }
 
-        private bool ProductExists(int id)
+        private bool OrderExists(int id)
         {
-          return (_context.Products?.Any(e => e.ProductId == id)).GetValueOrDefault();
+          return (_context.Orders?.Any(e => e.OrderId == id)).GetValueOrDefault();
         }
     }
 }

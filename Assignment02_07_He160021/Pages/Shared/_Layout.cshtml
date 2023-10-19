@@ -23,18 +23,37 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                        </li>
+
+                        @if (User.Claims.SingleOrDefault(c => c.Type == "Role")?.Value == "1")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Customers/Index">Customers</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Products/Index">Products</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Orders/Admin">Orders</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Categories/Index">Categories</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Suppliers/Index">Suppliers</a>
+                            </li>
+                        }
+                        
                     </ul>
                 </div>
                 <div>
                     @if (User.Identity.IsAuthenticated)
                     {
                         <ul class="navbar-nav flex-grow-1">
-
                             <li class="nav-item">
-                                <a class="btn btn-link" asp-page="/Orders">My Orders</a>
+                                <a class="btn btn-link" asp-page="/Profile">My Profile</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-link" asp-page="/Orders/Index">My Orders</a>
                             </li>
                             <li class="nav-item">
                                 <a class="btn btn-link" asp-page="/Carts/Cart">Cart</a>
@@ -48,6 +67,7 @@
                     }
                     else
                     {
+                        <a class="btn btn-link" asp-page="/Register" >Register</a>
                         <a class="btn btn-link" asp-page="/Login" >Login</a>
                     }
                 </div>
