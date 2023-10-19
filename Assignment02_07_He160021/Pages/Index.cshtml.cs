@@ -70,24 +70,24 @@ namespace Assignment02_07_He160021.Pages
         public IActionResult OnPostAddItem(IFormCollection form)
         {
             string? cookie = Request.Cookies["my-cart"];
-            string newCookie;
-            if (cookie != null)
+            if(cookie == null)
+            {
+                cookie = form["id"] + ",1";
+            }
+            else
             {
                 Cart cart = new Cart()
                 {
                     Id = int.Parse(form["id"]),
                     Number = 1
                 };
-                newCookie = CartUtil.AddToCart(cart, cookie);
-            }
-            else
-            {
-                newCookie = form["id"] + "," + 1;
+                cookie = CartUltil.AddItemToCart(cart, cookie);
+
             }
 
             CookieOptions options = new CookieOptions();
             options.Expires = DateTime.Now.AddDays(30);
-            Response.Cookies.Append("my-cart", newCookie);
+            Response.Cookies.Append("my-cart", cookie, options);
             return RedirectToPage("/Index");
         }
     }

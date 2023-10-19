@@ -8,7 +8,7 @@ namespace Assignment02_07_He160021.Dtos
         public int Number { get; set; }
         public Product? Product { get; set; }
 
-        public string GetCart()
+        public string GetInfo()
         {
             return Id.ToString() + "," + Number.ToString();
         }

@@ -33,7 +33,7 @@
                     <div class="card-body">
                         <h5 class="card-title">@item.ProductName</h5>
                         <p class="card-text text-danger">$ @item.UnitPrice</p>
-                        <button type="button" class="btn btn-primary" onclick="handleAdditem(@item.ProductId)">Add To Card</button>
+                        <button type="button" class="btn btn-primary" onclick="handleAddToCart(@item.ProductId)">Add To Card</button>
                         <a asp-page="./Products/Details" asp-route-id="@item.ProductId" class="btn btn-danger">View Details</a>
                     </div>
                 </div>
@@ -42,15 +42,19 @@
     </div>
 </div>
 
-<div hidden>
-    <form method="post" asp-page-handler="AddItem" id="addToCartForm">
-        <input type="text" name="id" id="productId" />
-    </form>
-</div>
+<form method="post" id="formAddToCart" asp-page-handler="AddItem" hidden>
+    <input name="id" id="productId" />
+</form>
 
 <script>
-    const handleAdditem = (productId) => {
-        document.getElementById("productId").value = productId;
-        document.getElementById("addToCartForm").submit();
+    const urlParams = new URLSearchParams(window.location.search);
+    const message = urlParams.get('message');
+    if (message) {
+        window.alert(message)
+    }
+
+    const handleAddToCart = (productId) => {
+        document.getElementById('productId').value = productId;
+        document.getElementById('formAddToCart').submit();
     }
 </script>
