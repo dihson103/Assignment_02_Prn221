@@ -32,8 +32,19 @@ namespace Assignment02_07_He160021.Pages.Customers
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-          if (!ModelState.IsValid || _context.Customers == null || Customer == null)
+            if (!ModelState.IsValid || _context.Customers == null || Customer == null)
             {
+                return Page();
+            }
+
+            if(IsUsernameExist(Customer.Username))
+            {
+                ModelState.AddModelError("error", "Username is already exist.");
+                return Page();
+            }
+            else if(Customer.Type != 1 && Customer.Type != 0)
+            {
+                ModelState.AddModelError("error", "Type should be 1 or 0");
                 return Page();
             }
 
@@ -41,6 +52,12 @@ namespace Assignment02_07_He160021.Pages.Customers
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
+        }
+
+        private bool IsUsernameExist(string username)
+        {
+            Customer? customer = _context.Customers.SingleOrDefault(x => x.Username == username);
+            return customer != null;
         }
     }
 }

@@ -21,6 +21,10 @@ namespace Assignment02_07_He160021.Pages.Orders
         }
 
         public IList<Order> Order { get;set; } = default!;
+        [BindProperty]
+        public DateTime FromDate { get; set; } = default!;
+        [BindProperty]
+        public DateTime ToDate { get; set; } = default!;
 
         public async Task OnGetAsync()
         {
@@ -29,6 +33,14 @@ namespace Assignment02_07_He160021.Pages.Orders
                 Order = await _context.Orders
                 .Include(o => o.Customer).ToListAsync();
             }
+        }
+
+        public async Task OnPost()
+        {
+            Order = await _context.Orders
+                .Include(o => o.Customer)
+                .Where(x => DateTime.Compare(FromDate, x.OrderDate) <= 0 && DateTime.Compare(ToDate, x.OrderDate) >= 0)
+                .ToListAsync();
         }
     }
 }

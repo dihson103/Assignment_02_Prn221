@@ -10,6 +10,25 @@
 <p>
     <a asp-page="Create">Create New</a>
 </p>
+
+<form class="row g-3 align-items-center mb-3 mt-3" method="post">
+    <div class="col-auto">
+        <label asp-for="FromDate"></label>
+    </div>
+    <div class="col-auto">
+        <input asp-for="FromDate" class="form-control" />
+    </div>
+    <div class="col-auto">
+        <label asp-for="ToDate"></label>
+    </div>
+    <div class="col-auto">
+        <input asp-for="ToDate" class="form-control" />
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-secondary">Search</button>
+    </div>
+</form>
+
 <table class="table">
     <thead>
         <tr>

@@ -54,6 +54,19 @@ namespace Assignment02_07_He160021.Pages.Customers
             if (customer != null)
             {
                 Customer = customer;
+
+                List<Order> orders = await _context.Orders.Where(x => x.CustomerId == customer.CustomerId).ToListAsync();
+                foreach(var order in orders)
+                {
+                    List<OrderDetail> orderDetails = _context.OrderDetails.Where(x => x.OrderId == order.OrderId).ToList();
+                    foreach(var detail in orderDetails)
+                    {
+                        _context.OrderDetails.Remove(detail);
+                    }
+                    _context.Orders.Remove(order);
+                }
+                await _context.SaveChangesAsync();
+
                 _context.Customers.Remove(Customer);
                 await _context.SaveChangesAsync();
             }
