@@ -54,22 +54,12 @@ namespace Assignment02_07_He160021.Pages.Products
             if (product != null)
             {
                 Product = product;
-                List<OrderDetail> orderDetails = await _context.OrderDetails.Include(o => o.Order).Where(m => m.ProductId == product.ProductId).ToListAsync();
-                List<Order> orders = new List<Order>();
+                List<OrderDetail> orderDetails = await _context.OrderDetails.Where(m => m.ProductId == product.ProductId).ToListAsync();
                 foreach(var order in orderDetails)
                 {
-                    var o = order.Order;
-                    if (!orders.Contains(o))
-                    {
-                        orders.Add(o);
-                    }
+                    var o = _context.Orders.FirstOrDefault(o => o.OrderId == order.OrderId);
                     _context.OrderDetails.Remove(order);
-                }
-                await _context.SaveChangesAsync();
-
-                foreach (var order in orders)
-                {
-                    _context.Orders.Remove(order);
+                    _context.Orders.Remove(o);
                 }
                 await _context.SaveChangesAsync();
 
